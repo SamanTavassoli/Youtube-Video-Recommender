@@ -17,7 +17,7 @@ public class YoutubeQuery {
     private static final String API_KEY = "AIzaSyCKuIK_Ke31BcFKW3yGUM2SZYqGG1ha_oU";
 
 
-    public static List<String> getRecommendationsForPerson(String name) {
+    public static String[] getRecommendationsForTags(String[] tags) {
         return null;
     }
 
