@@ -7,16 +7,21 @@ import com.google.api.services.youtube.model.SearchListResponse;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 
-
-public class PersonalTest {
+public class YoutubeQuery {
 
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "YOUTUBE-VIDEO-RECOMMENDER";
     private static final String API_KEY = "AIzaSyCKuIK_Ke31BcFKW3yGUM2SZYqGG1ha_oU";
 
-    public static void main(String[] args) throws GeneralSecurityException, IOException {
+
+    public static List<String> getRecommendationsForPerson(String name) {
+        return null;
+    }
+
+    public static void getResults(String[] args) throws GeneralSecurityException, IOException {
         final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
         YouTube youTubeService = new YouTube.Builder(httpTransport,JSON_FACTORY,null)
