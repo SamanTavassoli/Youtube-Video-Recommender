@@ -29,7 +29,7 @@ public class PersonalTest {
         SearchListResponse response = request.setMaxResults(25L)
                 .setQ("food")
                 .execute();
-        
+
         System.out.println("Response: " + response);
     }
 }
