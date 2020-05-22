@@ -1,0 +1,46 @@
+name: Floyd Mayweather
+history: video1.mp4, video9.mp4
+name: George Clooney
+history: video4.mp4, video3.mp4, video3.mp4
+name: Kylie Jenner
+history: video7.mp4
+name: Judy Sheindlin
+history: video12.mp4, video12.mp4, video12.mp4, video10.mp4
+name: Dwayne Johnson
+history:
+name: J. K. Rowling
+history: video6.mp4, video7.mp4
+name: Beyoncé
+history: video8.mp4, video2.mp4, video11.mp4
+name: Lionel Messi
+history: video2.mp4
+name: Ed Sheeran
+history: video9.mp4, video11.mp4, video12.mp4
+name: Cristiano Ronaldo
+history: video1.mp4, video9.mp4
+name: Taylor Swift
+history: video1.mp4, video3.mp4, video1.mp4, video7.mp4
+name: Kanye West
+history: video2.mp4, video11.mp4
+name: Shah Rukh Khan
+history: video5.mp4, video12.mp4, video11.mp4
+name: LeBron James
+history: video7.mp4, video2.mp4, video6.mp4
+name: Dr. Phil McGraw
+history: video9.mp4, video8.mp4, video1.mp4. video10.mp4
+name: Canelo Alvarez
+history:
+name: Chris Hemsworth
+history: video3.mp4
+name: Robert Downey, Jr.
+history: video1.mp4, video1.mp4, video1.mp4, video1.mp4
+name: Bradley Cooper
+history: video9.mp4, video2.mp4
+name: Scarlett Johansson
+history: video10.mp4, video11.mp4, video5.mp4
+name: Ariana Grande
+history: video3.mp4, video4.mp4
+name: DJ Khaled
+history: video6.mp4, video9.mp4, video9.mp4
+name: Shawn Mendes
+history: video12.mp4
