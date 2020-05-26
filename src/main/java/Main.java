@@ -20,7 +20,7 @@ public class Main {
         }
     }
 
-    public static void run(String name) {
+    private static void run(String name) {
         // get history for name
         String[] history = getHistory(name);
 
@@ -40,6 +40,7 @@ public class Main {
     }
 
     private static String[] getHistory(String name) {
+        
         return null;
     }
 
