@@ -27,7 +27,7 @@ public class YoutubeQuery {
         }
     }
     public static String[] getRecommendationsForTags(String[] tags) {
-        return null;
+        return new String[0];
     }
 
     private static String[] getResults(String[] args) throws GeneralSecurityException, IOException {
