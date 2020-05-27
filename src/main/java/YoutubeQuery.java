@@ -16,7 +16,7 @@ public class YoutubeQuery {
 
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "YOUTUBE-VIDEO-RECOMMENDER";
-    private static final String API_KEY = "***REMOVED***";
+    private static final String API_KEY = "AIzaSyCKuIK_Ke31BcFKW3yGUM2SZYqGG1ha_oU";
 
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {
@@ -27,7 +27,7 @@ public class YoutubeQuery {
         }
     }
     public static String[] getRecommendationsForTags(String[] tags) {
-        return null;
+        return new String[0];
     }
 
     private static String[] getResults(String[] args) throws GeneralSecurityException, IOException {
