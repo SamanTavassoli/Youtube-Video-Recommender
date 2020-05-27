@@ -3,6 +3,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+<<<<<<< HEAD
+=======
+import java.util.Scanner;
+>>>>>>> fa737c8ba26415d260de210da642776387cee7d5
 
 public class Main {
     public static void main(String[] args) {
