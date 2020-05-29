@@ -8,15 +8,15 @@ import com.google.api.services.youtube.model.SearchResult;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class YoutubeQuery {
 
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "YOUTUBE-VIDEO-RECOMMENDER";
-    private static final String API_KEY = "***REMOVED***";
+    private static String API_KEY;
 
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {
@@ -41,6 +41,9 @@ public class YoutubeQuery {
 
         // setting the request type and setting api key for credentials
         YouTube.Search.List request = youTubeService.search().list("snippet");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter API KEY: ");
+        API_KEY = scanner.nextLine();
         request.setKey(API_KEY);
 
         // fetching response for "food"
