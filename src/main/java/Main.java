@@ -28,17 +28,19 @@ public class Main {
     private static void run(String name) {
         // get history for name
         String[] history = getHistory(name);
-        System.out.println("Videos:");
+        System.out.print("Videos: ");
         for (String video : history) {
-            System.out.println(video);
+            System.out.print(video + ", ");
         }
+        System.out.println();
 
         // get tags for videos in history
         String[] tags = getTags(history);
-        System.out.println("Tags:");
+        System.out.print("Tags: ");
         for (String tag : tags) {
-            System.out.println(tag);
+            System.out.print(tag + ", ");
         }
+        System.out.println();
 
         // get recommendations for tags from youtube api
         String[] recommendations = YoutubeQuery.getRecommendationsForTags(tags);
@@ -88,6 +90,7 @@ public class Main {
     }
 
     private static String[] getTags(String[] history) {
+
         try {
             Path path = Path.of(System.getProperty("user.dir") + "/src/main/resources/input/videoTags.txt");
             if (Files.exists(path)) {
@@ -96,7 +99,7 @@ public class Main {
                 ArrayList<String> tags = new ArrayList<>();
                 // going through videos in steps of 2 to get tags
                 for (String video : history) {
-                    for (int i = 0; i < videoTags.length / 2; i += 2) {
+                    for (int i = 0; i < videoTags.length; i += 2) {
                         if (videoTags[i].contains(video)) {
                             tags.addAll(parseTags(videoTags[i + 1]));
                         }

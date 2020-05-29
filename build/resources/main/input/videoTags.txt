@@ -1,24 +1,24 @@
 video: video1.mp4
-tags: something, something
+tags: dog, skateboard
 video: video2.mp4
-tags:
+tags: butterfly, flower, slow motion
 video: video3.mp4
-tags:
+tags: wolf, slow motion
 video: video4.mp4
-tags:
+tags: beach, black and white
 video: video5.mp4
-tags:
+tags: farm, tractor, harvest
 video: video6.mp4
-tags:
+tags: work, macbook, watch, semi formal, classy
 video: video7.mp4
-tags:
+tags: coffee, brewing
 video: video8.mp4
-tags:
+tags: cow, winter, slow motion
 video: video9.mp4
-tags:
+tags: rolling dough, dough, pastry, roller
 video: video10.mp4
-tags:
+tags: city, couple, view, busy, dust, pollution, tourism
 video: video11.mp4
-tags:
+tags: tourism, woman, columns, architectur
 video: video12.mp4
-tags:
+tags: santa, smile, christmas, wink
