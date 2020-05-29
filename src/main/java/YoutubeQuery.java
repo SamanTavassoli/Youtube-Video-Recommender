@@ -47,12 +47,16 @@ public class YoutubeQuery {
 
     private static String[] parseResults(String[] results) {
         for (int i = 0; i < results.length; i++) {
-            String jsonString = results[i];
-            JSONObject obj = new JSONObject(jsonString);
-            String videoTitlte = obj.getJSONObject("snippet").getString("title");
-            String videoId = "https://www.youtube.com/watch?v=" + obj.getJSONObject("id").getString("videoId");
-            String result = "[\"" + videoTitlte + "\", " + videoId + "]";
-            results[i] = result;
+            try {
+                String jsonString = results[i];
+                JSONObject obj = new JSONObject(jsonString);
+                String videoTitlte = obj.getJSONObject("snippet").getString("title");
+                String videoId = "https://www.youtube.com/watch?v=" + obj.getJSONObject("id").getString("videoId");
+                String result = "[\"" + videoTitlte + "\", " + videoId + "]";
+                results[i] = result;
+            } catch (Exception e) {
+                results[i] = "Could not find videoId or title for: " + results[i];
+            }
         }
         return results;
     }
