@@ -19,23 +19,14 @@ public class YoutubeQuery {
     private static final String APPLICATION_NAME = "YOUTUBE-VIDEO-RECOMMENDER";
     private static String API_KEY;
 
-
-    public static void main(String[] args) throws GeneralSecurityException, IOException {
-
-        String[] results = getResults(null);
-        for (String result : results) {
-            System.out.println(result);
-        }
-    }
     public static String[] getRecommendationsForTags(String[] tags) {
         try {
             return parseResults(getResults(createQuerySearchTerm(tags)));
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
             System.err.println("No results were obtained from search");
-            return new String[0];
         }
-
+        return new String[0];
     }
 
     /**
