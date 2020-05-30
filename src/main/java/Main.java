@@ -1,18 +1,39 @@
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
+
+    private static final Path VIDEO_TAGS_PATH = Path.of(System.getProperty("user.dir") + "/src/main/resources/input/videoTags.txt");
+    private static final Path VIEWING_HISTORY_PATH = Path.of(System.getProperty("user.dir") + "/src/main/resources/input/viewingHistory.txt");
+
+    /**
+     * Holds the viewing histories of different users
+     * Each user is a String
+     * The viewing history is an ArrayList of Strings
+     */
+    private static HashMap<String, ArrayList<String>> viewingHistories = new HashMap<>();
+
+    /**
+     * Holds the tags for different videos
+     * Each video is a String
+     * The tags list is an ArrayList of Strings
+     */
+    private static HashMap<String, ArrayList<String>> videoTags = new HashMap<>();
+
     public static void main(String[] args) {
+
+        instantiateVideoTags();
+        instantiateViewingHistories();
+
+        run("Lionel Messi");
 
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
 
         while (isRunning) {
-            System.out.println("\nType Command or help for a list of commands:");
+            System.out.println("\nType Command or help for a list of commands available:");
             String input = scanner.nextLine();
 
             if (input.contains("run")) {
@@ -24,49 +45,75 @@ public class Main {
             }
 
             if (input.equals("list")) {
-                System.out.println("Names in viewing history: ");
-                for (String name : getNamesInViewingHistory()) {
-                    System.out.println(name);
-                }
+                printNamesInViewingHistory();
             }
 
             if (input.equals("help")) {
-                System.out.println("Available commands are: run (name), exit, list");
+                System.out.println("Available commands are:\n" +
+                        "run (name) - Make video recommendations for the given name\n" +
+                        "list - print a list of names in the viewing history\n" +
+                        "exit - exit the program");
             }
         }
     }
 
+    /**
+     * Prints video recommendations given a name
+     *
+     * Gets viewing history for that name
+     * Gets tags for viewing history
+     * Gets recommendations from YoutubeQuery
+     * Prints Recommendations
+     *
+     * @param name name for which recommendations are to be given
+     */
+
     private static void run(String name) {
-        System.out.println("Getting recommendations for: " + name);
 
-        // get history for name
-        String[] history = getHistory(name);
-        if (history.length == 0) {
-            System.out.println("No history obtained, will not search");
-            return;
+        ArrayList<String> history = getHistory(name);
+        ArrayList<String> tags = getTags(history);
+
+        String[] temp = new String[tags.size()];
+        System.out.println("tags:");
+        for (int i = 0; i < temp.length; i++) {
+            System.out.println(temp[i]);
+            temp[i] = tags.get(i);
         }
-        System.out.print("Video history: ");
+
+        String[] recommendations = YoutubeQuery.getRecommendationsForTags(temp);
+        printRecommendations(recommendations);
+    }
+
+    // -------- Map getters --------
+
+    private static ArrayList<String> getHistory(String name) {
+        return viewingHistories.get(name);
+    }
+
+    private static ArrayList<String> getTags(ArrayList<String> history) {
+        ArrayList<String> tags = new ArrayList<>();
         for (String video : history) {
-            System.out.print(video + ", ");
+            tags.addAll(videoTags.get(video));
+
         }
-        System.out.println();
 
-        // get tags for videos in history
-        String[] tags = getTags(history);
-        if (tags.length == 0) {
-            System.out.println("No tags obtained, will not search");
-            return;
+        return tags;
+    }
+
+    // -------- Print requests --------
+
+    private static void printNamesInViewingHistory() {
+        System.out.println("Names in viewing history: ");
+        for (String name : viewingHistories.keySet()) {
+            System.out.println(name);
         }
-        System.out.print("Tags: ");
-        for (String tag : tags) {
-            System.out.print(tag + ", ");
-        }
-        System.out.println();
+    }
 
-
-        // get recommendations for tags from youtube api
-        String[] recommendations = YoutubeQuery.getRecommendationsForTags(tags);
-
+    /**
+     * Prints recommendations provided with a header followed by each recommendation
+     * @param recommendations recommendations to be printed
+     */
+    private static void printRecommendations(String[] recommendations) {
         // print recommendations
         System.out.println("Recommendations: " + recommendations.length);
         int count = 1;
@@ -76,101 +123,63 @@ public class Main {
         }
     }
 
+    // -------- Parsing history and tags into maps --------
+
+    // ---- Instantiations calls
+
+    private static void instantiateViewingHistories() {
+        String[] lines = getFileLines(VIEWING_HISTORY_PATH);
+        parseLinesIntoMap(lines, viewingHistories, "name", "history");
+    }
+
+    private static void instantiateVideoTags() {
+        String[] lines = getFileLines(VIDEO_TAGS_PATH);
+        parseLinesIntoMap(lines, videoTags, "video", "tags");
+    }
+
+    // ---- Fetching files
+
     /**
-     * Return a String[] containing the videos in the history of whoever's name is provided
+     * Returns an array of strings representing the lines of a txt file
+     * @param path path of the txt file
+     * @return the lines of the file in an array of strings
      */
-    private static String[] getHistory(String name) {
-
-        try {
-            Path path = Path.of(System.getProperty("user.dir") + "/src/main/resources/input/viewingHistory.txt");
-            if (Files.exists(path)) {
-                String fileContent = Files.readString(path);
-                String[] viewingHistory = fileContent.split("\n");
-                // going through history in steps of 2 to get names
-                for (int i = 0; i < viewingHistory.length; i += 2) {
-                    if (viewingHistory[i].contains(name)) { // TODO: improve so that not entering exact name does not pick wrong name
-                        return parseHistory(viewingHistory[i + 1]);
-                    }
-                }
-                System.out.println("Could not find name in viewingHistory: " + name);
-                System.out.println("Type the command \"list\" to get the names in the viewingHistory file");
-            } else {
-                System.out.println("Could not find path: " + path);
+    private static String[] getFileLines(Path path) {
+        if (Files.exists(path)) {
+            try {
+                return Files.readString(path).split("\n");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            System.err.println("Could not find path: " + path);
         }
         return new String[0];
     }
 
-    private static String[] parseHistory(String history) {
-        history = history.replace("history:", "");
-        String[] parsedHistory = history.split(",");
-        for (int i = 0; i < parsedHistory.length; i++) {
-            parsedHistory[i] = parsedHistory[i].trim();
+    // ---- Parsing of data
+
+    private static void parseLinesIntoMap(String[] lines, HashMap<String, ArrayList<String>> map, String firstGroupName, String secondGroupName) {
+        for (int i = 0; i < lines.length; i += 2) {
+            String firstLine = lines[i];
+            String secondLine = lines[i + 1];
+            map.put(parseFirstLine(firstLine, firstGroupName), parseSecondLine(secondLine, secondGroupName));
         }
-        return parsedHistory;
     }
 
-    private static String[] getTags(String[] history) {
-
-        try {
-            Path path = Path.of(System.getProperty("user.dir") + "/src/main/resources/input/videoTags.txt");
-            if (Files.exists(path)) {
-                String fileContent = Files.readString(path);
-                String[] videoTags = fileContent.split("\n");
-                ArrayList<String> tags = new ArrayList<>();
-                // going through videos in steps of 2 to get tags
-                for (String video : history) {
-                    for (int i = 0; i < videoTags.length; i += 2) {
-                        if (videoTags[i].contains(video)) {
-                            tags.addAll(parseTags(videoTags[i + 1]));
-                        }
-                    }
-                }
-                String[] tagsInArray = new String[tags.size()];
-                for (int i = 0; i < tags.size(); i++) {
-                    tagsInArray[i] = tags.get(i);
-                }
-                return tagsInArray;
-            } else {
-                System.err.println("Could not find path: " + path);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new String[0];
+    private static String parseFirstLine(String line, String groupName) {
+        return line.substring(groupName.length() + 1).trim();
     }
 
-    private static ArrayList<String> parseTags(String tags) {
-        tags = tags.replace("tags:", "");
-        String[] parsedTags = tags.split(",");
-        ArrayList<String> returnList = new ArrayList<>();
-        for (int i = 0; i < parsedTags.length; i++) {
-            returnList.add(parsedTags[i].trim());
-        }
-        return returnList;
-    }
+    private static ArrayList<String> parseSecondLine(String line, String groupName) {
+        line = line.substring(groupName.length() + 1);
 
-    private static String[] getNamesInViewingHistory() {
-        try {
-            Path path = Path.of(System.getProperty("user.dir") + "/src/main/resources/input/viewingHistory.txt");
-            if (Files.exists(path)) {
-                String fileContent = Files.readString(path);
-                String[] viewingHistory = fileContent.split("\n");
-                String[] names = new String[viewingHistory.length / 2];
-                for (int i = 0; i < names.length; i++) {
-                    String nameLine = viewingHistory[i*2];
-                    names[i] = nameLine.substring(6); // "name: " -> 6
-                }
-                return names;
-            } else {
-                System.err.println("Could not find path: " + path);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new String[0];
-    }
+        String[] elements = line.split(",");
 
+        for (int i = 0; i < elements.length; i++) {
+            elements[i] = elements[i].trim();
+        }
+
+        return new ArrayList<String>(Arrays.asList(elements));
+    }
 }
