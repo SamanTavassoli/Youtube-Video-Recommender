@@ -3,10 +3,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * This class recommends videos to watch depending on a user's video viewing history
+ * It refers to two txt files containing users' viewing histories and the tags for the videos viewed
+ * It can also be asked to provide a list of users from the viewing history file so that one of them
+ * can be picked in order to give recommendations
+ */
 public class Main {
+
+    // ---- Paths of reference files
 
     private static final Path VIDEO_TAGS_PATH = Path.of(System.getProperty("user.dir") + "/src/main/resources/input/videoTags.txt");
     private static final Path VIEWING_HISTORY_PATH = Path.of(System.getProperty("user.dir") + "/src/main/resources/input/viewingHistory.txt");
+
+    // ---- Maps holding data
 
     /**
      * Holds the viewing histories of different users
@@ -14,13 +24,14 @@ public class Main {
      * The viewing history is an ArrayList of Strings
      */
     private static HashMap<String, ArrayList<String>> viewingHistories = new HashMap<>();
-
     /**
      * Holds the tags for different videos
      * Each video is a String
      * The tags list is an ArrayList of Strings
      */
     private static HashMap<String, ArrayList<String>> videoTags = new HashMap<>();
+
+    // -------- Main & Run --------
 
     public static void main(String[] args) {
 
@@ -159,21 +170,38 @@ public class Main {
 
     // ---- Parsing of data
 
+    /**
+     * Parses the lines from the viewing history and video tags files into their respective hashmaps
+     * @param lines lines of data obtained from history or tags files
+     * @param map viewing history or video tags hashmap
+     * @param firstGroupName name / video
+     * @param secondGroupName history / tags
+     */
     private static void parseLinesIntoMap(String[] lines, HashMap<String, ArrayList<String>> map, String firstGroupName, String secondGroupName) {
         for (int i = 0; i < lines.length; i += 2) {
             String firstLine = lines[i];
             String secondLine = lines[i + 1];
-            map.put(parseFirstLine(firstLine, firstGroupName), parseSecondLine(secondLine, secondGroupName));
+            map.put(parseGroupContent(firstLine, firstGroupName), splitIntoElements(parseGroupContent(secondLine, secondGroupName)));
         }
     }
 
-    private static String parseFirstLine(String line, String groupName) {
+    /**
+     * Parses a line which starts with a group name
+     * Simply removes the group name from the line
+     * @param line line to remove group name from
+     * @param groupName group name to be removed from line
+     * @return the line without the group name
+     */
+    private static String parseGroupContent(String line, String groupName) {
         return line.substring(groupName.length() + 1).trim();
     }
 
-    private static ArrayList<String> parseSecondLine(String line, String groupName) {
-        line = line.substring(groupName.length() + 1);
-
+    /**
+     * Splits a line containing elements separated with a "," into an ArrayList of Strings
+     * @param line line containing the elements
+     * @return the separated elements in an ArrayList
+     */
+    private static ArrayList<String> splitIntoElements(String line) {
         String[] elements = line.split(",");
 
         for (int i = 0; i < elements.length; i++) {
